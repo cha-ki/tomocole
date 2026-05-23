@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>トモコレ</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- ===== タイトル ===== -->
+<div id="screen-title" class="screen active">
+  <div class="title-art">🏘️</div>
+  <h1>トモコレ</h1>
+  <p>ともだちをつくって<br>まちをさんぽしよう！</p>
+  <button class="btn-big" onclick="showScreen('collection')">はじめる！</button>
+</div>
+
+<!-- ===== コレクション ===== -->
+<div id="screen-collection" class="screen">
+  <div class="top-bar">
+    <h2>ともだち一覧</h2>
+    <button class="btn-small pink" onclick="showScreen('create')">＋ つくる</button>
+  </div>
+  <div id="char-grid" class="char-grid"></div>
+  <div id="empty-msg" class="empty-msg">
+    <div style="font-size:3rem">😶</div>
+    <p>まだともだちがいないよ！<br>「つくる」からはじめよう！</p>
+  </div>
+</div>
+
+<!-- ===== キャラクター作成 ===== -->
+<div id="screen-create" class="screen">
+  <div class="top-bar">
+    <button class="btn-back" onclick="showScreen('collection')">← もどる</button>
+    <h2>ともだちをつくろう！</h2>
+  </div>
+
+  <div class="create-body">
+    <!-- プレビュー -->
+    <div class="preview-box">
+      <div id="preview-sprite" class="char-sprite-lg"></div>
+      <div id="preview-name-label" class="preview-name">？？？</div>
+    </div>
+
+    <!-- 設定 -->
+    <div class="options-box">
+
+      <div class="opt-section">
+        <div class="opt-label">なまえ</div>
+        <input id="inp-name" type="text" maxlength="8" placeholder="なまえをいれてね" oninput="updatePreview()">
+      </div>
+
+      <div class="opt-section">
+        <div class="opt-label">かおのかたち</div>
+        <div class="btn-row">
+          <button class="sel-btn active" data-key="face" data-val="circle" onclick="pick(this)">まる</button>
+          <button class="sel-btn" data-key="face" data-val="oval" onclick="pick(this)">たまご</button>
+          <button class="sel-btn" data-key="face" data-val="square" onclick="pick(this)">しかく</button>
+        </div>
+      </div>
+
+      <div class="opt-section">
+        <div class="opt-label">はだのいろ</div>
+        <div class="color-row" id="skin-colors">
+          <button class="color-dot active" data-key="skinColor" data-val="#FFD5A8" style="background:#FFD5A8" onclick="pick(this)"></button>
+          <button class="color-dot" data-key="skinColor" data-val="#F5B895" style="background:#F5B895" onclick="pick(this)"></button>
+          <button class="color-dot" data-key="skinColor" data-val="#E8956D" style="background:#E8956D" onclick="pick(this)"></button>
+          <button class="color-dot" data-key="skinColor" data-val="#C68642" style="background:#C68642" onclick="pick(this)"></button>
+          <button class="color-dot" data-key="skinColor" data-val="#8D5524" style="background:#8D5524" onclick="pick(this)"></button>
+        </div>
+      </div>
+
+      <div class="opt-section">
+        <div class="opt-label">かみのいろ</div>
+        <div class="color-row">
+          <button class="color-dot active" data-key="hairColor" data-val="#2c1b0e" style="background:#2c1b0e" onclick="pick(this)"></button>
+          <button class="color-dot" data-key="hairColor" data-val="#8B4513" style="background:#8B4513" onclick="pick(this)"></button>
+          <button class="color-dot" data-key="hairColor" data-val="#FFD700" style="background:#FFD700" onclick="pick(this)"></button>
+          <button class="color-dot" data-key="hairColor" data-val="#FF69B4" style="background:#FF69B4" onclick="pick(this)"></button>
+          <button class="color-dot" data-key="hairColor" data-val="#7B68EE" style="background:#7B68EE" onclick="pick(this)"></button>
+          <button class="color-dot" data-key="hairColor" data-val="#FFFFFF" style="background:#FFFFFF;border:2px solid #ccc" onclick="pick(this)"></button>
+        </div>
+      </div>
+
+      <div class="opt-section">
+        <div class="opt-label">ふくのいろ</div>
+        <div class="color-row">
+          <button class="color-dot active" data-key="clothColor" data-val="#6ab0f5" style="background:#6ab0f5" onclick="pick(this)"></button>
+          <button class="color-dot" data-key="clothColor" data-val="#f5a6a6" style="background:#f5a6a6" onclick="pick(this)"></button>
+          <button class="color-dot" data-key="clothColor" data-val="#a8e6a3" style="background:#a8e6a3" onclick="pick(this)"></button>
+          <button class="color-dot" data-key="clothColor" data-val="#f7e08a" style="background:#f7e08a" onclick="pick(this)"></button>
+          <button class="color-dot" data-key="clothColor" data-val="#d4a8f5" style="background:#d4a8f5" onclick="pick(this)"></button>
+          <button class="color-dot" data-key="clothColor" data-val="#f5c88a" style="background:#f5c88a" onclick="pick(this)"></button>
+        </div>
+      </div>
+
+      <div class="opt-section">
+        <div class="opt-label">すきなもの</div>
+        <div class="btn-row wrap">
+          <button class="sel-btn active" data-key="fav" data-val="food" onclick="pick(this)">🍕たべもの</button>
+          <button class="sel-btn" data-key="fav" data-val="animals" onclick="pick(this)">🐱どうぶつ</button>
+          <button class="sel-btn" data-key="fav" data-val="sports" onclick="pick(this)">⚽スポーツ</button>
+          <button class="sel-btn" data-key="fav" data-val="music" onclick="pick(this)">🎵おんがく</button>
+        </div>
+      </div>
+
+      <button class="btn-big" onclick="saveChar()">このこにする！🎉</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===== まち ===== -->
+<div id="screen-town" class="screen">
+  <div class="town-header">
+    <button class="btn-back" onclick="showScreen('collection')">← もどる</button>
+    <div id="town-char-name" class="town-char-name"></div>
+    <div class="coin-badge">🪙<span id="coin-disp">0</span></div>
+  </div>
+
+  <!-- まちシーン -->
+  <div class="town-wrap">
+    <div class="town-scene" id="town-scene">
+      <!-- 空 -->
+      <div class="sky">
+        <span class="cloud" style="left:10%;top:15%">☁️</span>
+        <span class="cloud" style="left:55%;top:8%">☁️</span>
+        <span class="cloud" style="left:80%;top:18%">☁️</span>
+      </div>
+
+      <!-- 地面アイテム置き場 -->
+      <div class="ground-items" id="ground-items"></div>
+
+      <!-- 建物 -->
+      <div class="building" id="bld-machi" style="left:120px" onclick="enterShop('machi')">
+        <div class="bld-roof" style="background:#e87a5d"></div>
+        <div class="bld-body" style="background:#f5c9b0">
+          <div class="bld-sign">まちづくりやさん</div>
+          <div class="bld-door"></div>
+        </div>
+      </div>
+
+      <div class="building" id="bld-conbini" style="left:520px" onclick="enterShop('conbini')">
+        <div class="bld-roof" style="background:#4a90d9"></div>
+        <div class="bld-body" style="background:#b8d9f5">
+          <div class="bld-sign">コンビニ</div>
+          <div class="bld-door"></div>
+        </div>
+      </div>
+
+      <!-- 地面 -->
+      <div class="ground"></div>
+
+      <!-- キャラ -->
+      <div class="town-char" id="town-char">
+        <div class="speech" id="speech" style="display:none"></div>
+        <div id="town-sprite" class="char-sprite-sm"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 操作 -->
+  <div class="town-controls">
+    <button class="btn-move" id="btn-left" onpointerdown="startWalk(-1)" onpointerup="stopWalk()" onpointerleave="stopWalk()">◀</button>
+    <button class="btn-talk" onclick="talk()">💬 はなす</button>
+    <button class="btn-move" id="btn-right" onpointerdown="startWalk(1)" onpointerup="stopWalk()" onpointerleave="stopWalk()">▶</button>
+  </div>
+  <div class="town-hint">おみせのちかくで はなすと おみせにはいれるよ！</div>
+</div>
+
+<!-- ===== まちづくりやさん ===== -->
+<div id="screen-shop-machi" class="screen">
+  <div class="top-bar">
+    <button class="btn-back" onclick="showScreen('town')">← まちにもどる</button>
+    <h2>🏪 まちづくりやさん</h2>
+    <div class="coin-badge">🪙<span id="machi-coin">0</span></div>
+  </div>
+  <p class="shop-desc">かってまちにおけるよ！</p>
+  <div class="shop-grid">
+    <div class="shop-card" onclick="buyItem('tree',20)">
+      <div class="item-emoji">🌳</div>
+      <div class="item-name">き</div>
+      <div class="item-price">🪙 20</div>
+    </div>
+    <div class="shop-card" onclick="buyItem('bench',30)">
+      <div class="item-emoji">🪑</div>
+      <div class="item-name">ベンチ</div>
+      <div class="item-price">🪙 30</div>
+    </div>
+    <div class="shop-card" onclick="buyItem('flower',10)">
+      <div class="item-emoji">🌸</div>
+      <div class="item-name">はな</div>
+      <div class="item-price">🪙 10</div>
+    </div>
+    <div class="shop-card" onclick="buyItem('lamp',25)">
+      <div class="item-emoji">🏮</div>
+      <div class="item-name">でんとう</div>
+      <div class="item-price">🪙 25</div>
+    </div>
+    <div class="shop-card" onclick="buyItem('fountain',50)">
+      <div class="item-emoji">⛲</div>
+      <div class="item-name">ふんすい</div>
+      <div class="item-price">🪙 50</div>
+    </div>
+    <div class="shop-card" onclick="buyItem('sign',15)">
+      <div class="item-emoji">🪧</div>
+      <div class="item-name">かんばん</div>
+      <div class="item-price">🪙 15</div>
+    </div>
+  </div>
+  <p class="shop-hint">さんぽするとコインがもらえるよ！</p>
+</div>
+
+<!-- ===== コンビニ ===== -->
+<div id="screen-shop-conbini" class="screen">
+  <div class="top-bar">
+    <button class="btn-back" onclick="showScreen('town')">← まちにもどる</button>
+    <h2>🏬 コンビニ</h2>
+    <div class="coin-badge">🪙<span id="conbini-coin">0</span></div>
+  </div>
+  <p class="shop-desc">ともだちにあげるものをかおう！</p>
+  <div class="shop-grid">
+    <div class="shop-card" onclick="buyItem('icecream',15)">
+      <div class="item-emoji">🍦</div>
+      <div class="item-name">アイス</div>
+      <div class="item-price">🪙 15</div>
+    </div>
+    <div class="shop-card" onclick="buyItem('juice',10)">
+      <div class="item-emoji">🧃</div>
+      <div class="item-name">ジュース</div>
+      <div class="item-price">🪙 10</div>
+    </div>
+    <div class="shop-card" onclick="buyItem('cake',25)">
+      <div class="item-emoji">🍰</div>
+      <div class="item-name">ケーキ</div>
+      <div class="item-price">🪙 25</div>
+    </div>
+    <div class="shop-card" onclick="buyItem('ball',20)">
+      <div class="item-emoji">⚽</div>
+      <div class="item-name">ボール</div>
+      <div class="item-price">🪙 20</div>
+    </div>
+  </div>
+  <p class="shop-hint">かったあとはともだちにはなしかけてみよう！</p>
+</div>
+
+<!-- ===== トースト通知 ===== -->
+<div id="toast" class="toast"></div>
+
+<script src="game.js"></script>
+</body>
+</html>
